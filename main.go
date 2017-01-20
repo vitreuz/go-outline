@@ -79,14 +79,25 @@ func main() {
 					})
 				case *ast.TypeSpec:
 					//TODO: Members if it's a struct or interface type?
-					declarations = append(declarations, Declaration{
-						spec.Name.String(),
-						"type",
-						"",
-						spec.Pos(),
-						spec.End(),
-						[]Declaration{},
-					})
+					if _, ok := spec.Type.(*ast.InterfaceType); ok {
+						declarations = append(declarations, Declaration{
+							spec.Name.String(),
+							"interface",
+							"",
+							spec.Pos(),
+							spec.End(),
+							[]Declaration{},
+						})
+					} else {
+						declarations = append(declarations, Declaration{
+							spec.Name.String(),
+							"type",
+							"",
+							spec.Pos(),
+							spec.End(),
+							[]Declaration{},
+						})
+					}
 				case *ast.ValueSpec:
 					for _, id := range spec.Names {
 						declarations = append(declarations, Declaration{
